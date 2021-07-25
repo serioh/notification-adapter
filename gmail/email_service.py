@@ -1,7 +1,6 @@
-from __future__ import print_function
-
 import base64
 import os.path
+from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from googleapiclient import errors
@@ -10,11 +9,27 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
+path_to_here = os.path.dirname(os.path.abspath(__file__))
+credentials_path = os.path.join(path_to_here, 'credentials.json')
+token_path = os.path.join(path_to_here, 'token.json')
+
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
+html_message = """\
+<html>
+  <head></head>
+  <body>
+    <p>Hi!<br>
+       How are you?<br>
+       Here is the <a href="http://www.python.org">link</a> you wanted.
+    </p>
+  </body>
+</html>
+"""
 
-def main():
+
+def authenticate():
     """Shows basic usage of the Gmail API.
     Lists the user's Gmail labels.
     """
@@ -22,23 +37,21 @@ def main():
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    if os.path.exists(token_path):
+        creds = Credentials.from_authorized_user_file(token_path, SCOPES)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+                credentials_path, SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
-        with open('token.json', 'w') as token:
+        with open(token_path, 'w') as token:
             token.write(creds.to_json())
 
-    service = build('gmail', 'v1', credentials=creds)
-    send_message(service, 'serioh3@gmail.com',
-                 create_message('serioh@gmail.com', 'leo.lebleis@gmail.com', 'test', 'hi'))
+    return build('gmail', 'v1', credentials=creds)
 
 
 def create_message(sender, to, subject, message_text):
@@ -53,14 +66,13 @@ def create_message(sender, to, subject, message_text):
   Returns:
     An object containing a base64url encoded email object.
   """
-    message = MIMEText(message_text)
+    message = MIMEMultipart('alternative')
     message['to'] = to
     message['from'] = sender
     message['subject'] = subject
-    b64_bytes = base64.urlsafe_b64encode(message.as_bytes())
-    b64_string = b64_bytes.decode()
-    body = {'raw': b64_string}
-    return body
+    part1 = MIMEText(message_text, 'html')
+    message.attach(part1)
+    return {'raw': base64.urlsafe_b64encode(message.as_string().encode()).decode()}
 
 
 def send_message(service, user_id, message):
@@ -85,4 +97,6 @@ def send_message(service, user_id, message):
 
 
 if __name__ == '__main__':
-    main()
+    service = authenticate()
+    send_message(service, 'serioh3@gmail.com',
+                 create_message('serioh@gmail.com', 'leo.lebleis@gmail.com', 'test', html_message))
