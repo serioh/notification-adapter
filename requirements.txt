@@ -1,5 +1,6 @@
 pytest~=6.2.4
 google~=3.0.0
 google-api-python-client==1.7.8
-
+google_auth_oauthlib
+pytest
 Flask~=2.0.1

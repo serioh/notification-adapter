@@ -1,5 +1,3 @@
-import pytest
-
 from gmail.email_service import authenticate, create_message, send_message
 
 
