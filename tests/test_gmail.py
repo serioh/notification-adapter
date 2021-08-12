@@ -1,12 +1,4 @@
-from gmail.email_service import authenticate, create_message
-
-
-def test_authenticate():
-    try:
-        service = authenticate()
-        assert service is not None
-    except Exception as exc:
-        assert False
+from gmail.email_service import create_message
 
 
 def test_create_message():
