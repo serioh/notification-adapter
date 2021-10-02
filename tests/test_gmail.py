@@ -1,4 +1,4 @@
-from gmail.email_service import create_message
+from src.gmail.email_service import create_message
 
 
 def test_create_message() -> None:

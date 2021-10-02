@@ -6,7 +6,7 @@ from fastapi import Request, Header, FastAPI, Query, Security, HTTPException
 from fastapi.security import APIKeyHeader
 from starlette import status
 
-from email_service import authenticate, send_message, create_message
+from gmail.email_service import authenticate, send_message, create_message
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -39,4 +39,4 @@ async def read_html(body: Request,
 
 
 if __name__ == "__main__":
-    uvicorn.run("gmail.api:app", reload=True)
+    uvicorn.run("src.api:app", reload=True)
