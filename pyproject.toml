@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "notification-adapter"
+version = "0.1.0"
+description = "A API to send email notifications."
+authors = ["leolebleis <leo.lebleis@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pytest = "^6.2.5"
+google = "^3.0.0"
+google-api-python-client = "^2.23.0"
+fastapi = "^0.68.1"
+uvicorn = "^0.15.0"
+python-multipart = "^0.0.5"
+unittest = "^0.0"
+python-dotenv = "^0.19.0"
+google-auth-oauthlib = "^0.4.6"
+callee = "^0.3.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
