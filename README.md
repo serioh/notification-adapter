@@ -6,15 +6,15 @@ A Python API that sends emails to a given recipient using the Google API.
     - [x] Send test email1
     - [x] Add ability to send html bodies
     
-- [ ] Flask
-    - [ ] Build a POST endpoint - look at Flask POST example
+- [x] FastAPI
+    - [x] Build a POST endpoint
+    - [x] API Key security from env variable
+    - [ ] openapi docs metadata
     
 - [ ] Write tests
-    - [x] Download pytest
     - [ ] Integration tests
     - [ ] Unit tests
-      - [x] Test authenticate
-      - [x] Test createmessage
+    - [ ] use unittest.mock and callee
     
 - [ ] Deploy through heroku
     - [ ] Create Heroku account
