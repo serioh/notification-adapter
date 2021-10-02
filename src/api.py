@@ -2,12 +2,13 @@ import os
 from typing import Optional
 
 import uvicorn
+from dotenv import load_dotenv
 from fastapi import Request, Header, FastAPI, Query, Security, HTTPException
 from fastapi.security import APIKeyHeader
 from starlette import status
 
-from gmail.email_service import authenticate, send_message, create_message
-from dotenv import load_dotenv
+from src.gmail.email_service import send_message, authenticate, create_message
+
 load_dotenv()
 
 app = FastAPI()
