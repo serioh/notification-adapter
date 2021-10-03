@@ -25,7 +25,6 @@ async def read_html(
     api_key_header: str = Security(api_key_header_auth),
     subject_line: str = Header(None),
     recipients: Optional[list[str]] = Query(None),
-    email_service: EmailService = Depends(EmailService)
 ):
     if api_key_header != API_KEY:
         raise HTTPException(
@@ -35,6 +34,8 @@ async def read_html(
 
     request_bytes = await body.body()
     html_message = request_bytes.decode("UTF-8")
+    gmail_client = authenticate_with_gmail()
+    email_service = EmailService(gmail_client)
     response = email_service.send_email(recipients, subject_line, html_message)
 
     return {"response": response}
