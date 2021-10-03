@@ -1,17 +1,23 @@
 import base64
 import os.path
+import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from dotenv import load_dotenv
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build, Resource
 
+from src.utils import get_project_root
 
-path_to_here = os.path.dirname(os.path.abspath(__file__))
-credentials_path = os.path.join(path_to_here, "credentials.json")
-token_path = os.path.join(path_to_here, "token.json")
+load_dotenv()
+
+
+ROOT_DIR = get_project_root()
+credentials_path = os.path.join(ROOT_DIR, "credentials.json")
+token_path = os.path.join(ROOT_DIR, os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
@@ -68,8 +74,7 @@ class EmailService:
 
 
 def authenticate_with_gmail() -> Resource:
-    """Authenticates with the Gmail API using local credentials files.
-    """
+    """Authenticates with the Gmail API using local credentials files."""
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
